@@ -1714,7 +1714,12 @@ ac_compiler_gnu=$ac_cv_c_compiler_gnu
 
 VERS=`cat ../../kernel/linux/pf_ring.h | grep RING_VERSION | head -1 | cut -d '"' -f 2`
 PLATFORM=`uname -p`
-REVISION=`svn info .| grep "^Revision" | cut -d " " -f 2`
+
+if `svn info`; then
+  REVISION=`svn info .| grep "^Revision" | cut -d " " -f 2`
+else
+  REVISION=nr
+fi
 
 MACHINE=`uname -m`
 
