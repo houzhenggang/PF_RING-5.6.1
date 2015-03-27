@@ -17,8 +17,9 @@ all:
 
 build-rpm: 
 # Do NOT build package as root (http://wiki.centos.org/HowTos/SetupRpmBuildEnvironment)
-#	mkdir -p $(HOME)/rpmbuild/{BUILD,RPMS,SOURCES,SPECS,SRPMS}
-#	echo '%_topdir %(echo $HOME)/rpmbuild' > ~/.rpmmacros
+		mkdir -p $(HOME)/rpmbuild/{BUILD,RPMS,SOURCES,SPECS,SRPMS}
+		echo '%_topdir $(HOME)/rpmbuild' > ~/.rpmmacros
+		test -e $(HOME)/rpmbuild/BUILD/PF_RING || ln -s $(PWD)/../../ $(HOME)/rpmbuild/BUILD/PF_RING
 	@rpmbuild -bb ./$(APPL).spec --define "pfring_version $(PACKAGE_VERSION)" --define "buildrev $(REVISION)" --define "nodna 0"
 	@./rpm-sign.exp $(HOME)/rpmbuild/RPMS/$(PLATFORM)/$(PACKAGE)
 	@echo ""
@@ -28,8 +29,9 @@ build-rpm:
 
 build-rpm-nodna:
 # Do NOT build package as root (http://wiki.centos.org/HowTos/SetupRpmBuildEnvironment)
-#       mkdir -p $(HOME)/rpmbuild/{BUILD,RPMS,SOURCES,SPECS,SRPMS}
-#       echo '%_topdir %(echo $HOME)/rpmbuild' > ~/.rpmmacros
+		mkdir -p $(HOME)/rpmbuild/{BUILD,RPMS,SOURCES,SPECS,SRPMS}
+		echo '%_topdir $(HOME)/rpmbuild' > ~/.rpmmacros
+		test -e $(HOME)/rpmbuild/BUILD/PF_RING || ln -s $(PWD)/../../ $(HOME)/rpmbuild/BUILD/PF_RING
 	@rpmbuild -bb ./$(APPL).spec --define "pfring_version $(PACKAGE_VERSION)" --define "buildrev $(REVISION)" --define "nodna 1"
 	@./rpm-sign.exp $(HOME)/rpmbuild/RPMS/$(PLATFORM)/$(PACKAGE)
 	@echo ""
@@ -41,5 +43,4 @@ build-rpm-nodna:
 cleanup-rpm:
 	rm -f $(PACKAGE_PATH)
 	rm -f $(HOME)/rpmbuild/BUILD/$(PACKAGE)
-
-
+	rm -f $(HOME)/rpmbuild/BUILD/PF_RING
